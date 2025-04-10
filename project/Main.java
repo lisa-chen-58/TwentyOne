@@ -19,8 +19,6 @@ public class Main{
 
             while (true) {
                 input = scanner.nextLine();
-                System.out.println("-- 'done' when all players have been entered.");
-                System.out.println("-- 'exit' to leave game.");
 
                 if (input.equalsIgnoreCase("exit")) {
                     System.out.println("User exited the game.");
