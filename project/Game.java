@@ -101,7 +101,6 @@ public class Game{
             cyclePlayerIndex();
         }
     }
-
     private void printResults(){
         for(Player player : playersList){
             if(player.getStatus() == "win"){
@@ -113,6 +112,9 @@ public class Game{
 
     // Static Methods
     public static void validateEntries (String[] names){
+        if(names.length <= 1){
+            throw new IllegalArgumentException("You need more than 1 name.");
+        }
         Set<String> namesAlreadyAdded = new HashSet<>();
         for( String name : names){
             if(!namesAlreadyAdded.add(name)){

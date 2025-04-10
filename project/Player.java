@@ -46,6 +46,8 @@ public class Player {
         }
         Random random = new Random();
         int rollResult = random.nextInt(6) + 1;
+        System.out.printf("%s has rolled a %d",this.name,rollResult);
+        System.out.println();
 
         addToScore(rollResult);
         printCurrentScore();
