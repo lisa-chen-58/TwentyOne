@@ -2,15 +2,56 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Game{
     private final List<Player> playersList = new ArrayList<>();
     private int currentPlayerIndex = 0;
     private boolean isGameOver = false;
     private int numOfActivePlayers;
+    private Scanner gameScanner;
 
     // Constructor
-    public Game (String[] playerNames){
+    public Game (Scanner scanner){
+        this.gameScanner = scanner;
+        addPlayersToGame();
+        this.numOfActivePlayers = playersList.size();
+    }
+
+    public void addPlayersToGame(){
+        List<String> playersToAdd = new ArrayList<>();
+
+        System.out.println("Continue adding names until all have been added.");
+        System.out.println("-- 'done' when all players have been entered.");
+        System.out.println("-- 'exit' to leave game.");
+        System.out.println("----------------------------");
+        String input = "";
+
+        while (true) {
+            input = this.gameScanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("User exited the game.");
+                return;
+            }
+
+            if (input.equalsIgnoreCase("done")) {
+                break;
+            }
+
+            if (input.isEmpty()){
+                System.out.println("Player name cannot be empty. Try again!");
+                continue;
+            }
+
+            playersToAdd.add(input);
+            System.out.println("Added " + input + " to game");
+            System.out.println("----------------------------");
+
+        }
+
+        String[] playerNames = playersToAdd.toArray(new String[0]);
+
         validateEntries(playerNames);
         for(String name : playerNames){
             try {
@@ -22,21 +63,23 @@ public class Game{
             }
         }
         System.out.println("----------------------------");
-        this.numOfActivePlayers = playersList.size();
     }
 
-    public List<Player> getPlayersList(){
-        return this.playersList;
-    }
+    public void startGame(){
+        System.out.println("Game has started! Hit enter to continue.");
 
-    public boolean getIsGameOver() { return this.isGameOver; }
+        while (!getIsGameOver()) {
+            System.out.println("Enter or type 'exit' to close");
+            String input = this.gameScanner.nextLine();
+            System.out.println("----------------------------");
 
-    public int getNumOfActivePlayers(){
-        return this.numOfActivePlayers;
-    }
-
-    public Player getCurrentPlayer(){
-        return playersList.get(this.currentPlayerIndex);
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Game is ending early!");
+                System.out.println("----------------------------");
+                break;
+            }
+            takeTurn();
+        }
     }
 
     private void cyclePlayerIndex(){
@@ -102,12 +145,38 @@ public class Game{
         }
     }
     private void printResults(){
+        List<Player> playersLost = new ArrayList<>();
         for(Player player : playersList){
             if(player.getStatus() == "win"){
-                System.out.println("The following player is a winner!:");
+                System.out.println("The following player is a winner!: " + player.getName());
             }
-            player.printResult();
+            if(player.getStatus() == "playing" && this.isGameOver){
+                System.out.println("The following player wins by default!: " + player.getName());
+            }
+            else{
+                playersLost.add(player);
+            }
         }
+        if(!playersLost.isEmpty()){
+            System.out.println("The following players have lost: ");
+            for(Player loser : playersLost){
+                System.out.println(loser.getName());
+            }
+        }
+    }
+
+    public List<Player> getPlayersList(){
+        return this.playersList;
+    }
+
+    public boolean getIsGameOver() { return this.isGameOver; }
+
+    public int getNumOfActivePlayers(){
+        return this.numOfActivePlayers;
+    }
+
+    public Player getCurrentPlayer(){
+        return playersList.get(this.currentPlayerIndex);
     }
 
     // Static Methods
