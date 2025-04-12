@@ -86,7 +86,7 @@ public class Game{
 
         // check for game over
         evaluateGameStatus();
-        if(getCurrentPlayer().getStatus() == "win" || this.isGameOver){
+        if(getCurrentPlayer().getStatus().equals("win") || this.isGameOver){
             printResults();
         } else {
 
@@ -106,7 +106,6 @@ public class Game{
     private void evaluateGameStatus(){
         if(this.numOfActivePlayers == 0){
             this.isGameOver = true;
-            endGame();
             System.out.println("GAME OVER");
             System.out.println("----------------------------");
         }
@@ -160,11 +159,18 @@ public class Game{
                 losers.add(player);
             }
         }
-        System.out.println("The following players have won: ");
-        printList(winners);
-
-        System.out.println("The following players have lost: ");
-        printList(losers);
+        if(winners.isEmpty()){
+            System.out.println("There are no winners :(");
+        } else {
+            System.out.println("The following players have won: ");
+            printList(winners);
+        }
+        if(losers.isEmpty()){
+            System.out.println("There are no losers <3");
+        } else {
+            System.out.println("The following players have lost: ");
+            printList(losers);
+        }
     }
 
     private void printList(List<Player> players){
@@ -186,10 +192,6 @@ public class Game{
 
     public Player getCurrentPlayer(){
         return playersList.get(this.currentPlayerIndex);
-    }
-
-    public void endGame(){
-        this.gameScanner.close();
     }
 
     // Static Methods
