@@ -24,11 +24,10 @@ public class Game{
         System.out.println("Continue adding names until all have been added.");
         System.out.println("-- 'done' when all players have been entered.");
         System.out.println("-- 'exit' to leave game.");
-        System.out.println("----------------------------");
-        String input = "";
+        System.out.printf("---------------------------- %n");
 
         while (true) {
-            input = this.gameScanner.nextLine().trim();
+            String input = this.gameScanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("exit")) {
                 System.out.println("User exited the game.");
@@ -88,6 +87,8 @@ public class Game{
         evaluateGameStatus();
         if(getCurrentPlayer().getStatus().equals("win") || this.isGameOver){
             printResults();
+            endGame();
+            return;
         } else {
 
             try {
@@ -101,6 +102,12 @@ public class Game{
             }
             cyclePlayerIndex();
         }
+    }
+
+    public void endGame() {
+        this.isGameOver = true;
+        System.out.println("Game over.");
+        System.out.println("----------------------------");
     }
 
     private void evaluateGameStatus(){
@@ -175,8 +182,7 @@ public class Game{
 
     private void printList(List<Player> players){
         for(Player player : players){
-            System.out.printf("%s with a score of %d", player.getName(),player.getScore());
-            System.out.println("");
+            System.out.printf("- %s (Score: %d)%n", player.getName(),player.getScore());
         }
     }
 
@@ -196,8 +202,8 @@ public class Game{
 
     // Static Methods
     public static void validateEntries (String[] names){
-        if(names.length <= 1){
-            throw new IllegalArgumentException("You need more than 1 name.");
+        if(names.length == 0){
+            throw new IllegalArgumentException("No player names provided.");
         }
         Set<String> namesAlreadyAdded = new HashSet<>();
         for( String name : names){

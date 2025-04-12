@@ -6,12 +6,9 @@ import java.util.Arrays;
 public class Main{
     public static void main(String[] args) {
 
-        try {
-            Scanner scanner = new Scanner(System.in);
-
+        try(Scanner scanner = new Scanner(System.in)) {
             Game game = new Game(scanner);
             game.startGame();
-            scanner.close();
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e.getMessage());
         }
