@@ -23,7 +23,7 @@ public class Player {
     }
 
     private void playerIsDone(){
-        System.out.println("Status has changed to " + this.status);
+        System.out.printf("-- Status has changed to: %s --%n", this.status);
         invalidatePlayCondition();
     }
 

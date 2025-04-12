@@ -106,7 +106,7 @@ public class Game{
 
     public void endGame() {
         this.isGameOver = true;
-        System.out.println("Game over.");
+        System.out.println("Thanks for playing!");
         System.out.println("----------------------------");
     }
 
