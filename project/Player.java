@@ -56,7 +56,7 @@ public class Player {
 
     public void printCurrentScore(){
         System.out.printf("%s's score is now %d.", this.name, this.score);
-        System.out.println("----------------------------");
+        System.out.println("");
     }
 
     public void printResult() {

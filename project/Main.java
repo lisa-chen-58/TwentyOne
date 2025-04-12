@@ -11,7 +11,6 @@ public class Main{
 
             Game game = new Game(scanner);
             game.startGame();
-            scanner.close();
         } catch (Exception e) {
             System.out.println("Unexpected error: " + e.getMessage());
         }

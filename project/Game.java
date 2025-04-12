@@ -82,48 +82,6 @@ public class Game{
         }
     }
 
-    private void cyclePlayerIndex(){
-        System.out.println("Cycling to next player...");
-        if(this.currentPlayerIndex == this.playersList.size()-1){
-            this.currentPlayerIndex = 0;
-        } else {
-            this.currentPlayerIndex += 1;
-        }
-    }
-
-    private void decreaseActivePlayersByOne(){
-        this.numOfActivePlayers -=1;
-    }
-
-    private void evaluateGameStatus(){
-        if(this.numOfActivePlayers <= 1){
-            this.isGameOver = true;
-            System.out.println("Game is over");
-        }
-    }
-
-    private Player determineStartingPlayer(){
-        if (this.numOfActivePlayers <= 0) {
-            throw new IllegalStateException("No active players left.");
-        }
-        Player player = getCurrentPlayer();
-        int safetyCheck = 0;
-        while(!player.isAbleToPlay()){
-            cyclePlayerIndex();
-            player = getCurrentPlayer();
-            safetyCheck++;
-
-            if (safetyCheck >= playersList.size()) {
-                throw new IllegalStateException("No valid starting player found.");
-            }
-        }
-
-        System.out.println("Starting round with player " + player.getName());
-        System.out.println("----------------------------");
-
-        return player;
-    }
-
     public void takeTurn(){
 
         // check for game over
@@ -144,24 +102,75 @@ public class Game{
             cyclePlayerIndex();
         }
     }
-    private void printResults(){
-        List<Player> playersLost = new ArrayList<>();
-        for(Player player : playersList){
-            if(player.getStatus() == "win"){
-                System.out.println("The following player is a winner!: " + player.getName());
-            }
-            if(player.getStatus() == "playing" && this.isGameOver){
-                System.out.println("The following player wins by default!: " + player.getName());
-            }
-            else{
-                playersLost.add(player);
+
+    private void evaluateGameStatus(){
+        if(this.numOfActivePlayers == 0){
+            this.isGameOver = true;
+            endGame();
+            System.out.println("GAME OVER");
+            System.out.println("----------------------------");
+        }
+    }
+
+    private void cyclePlayerIndex(){
+        System.out.println("Cycling to next player...");
+        if(this.currentPlayerIndex == this.playersList.size()-1){
+            this.currentPlayerIndex = 0;
+        } else {
+            this.currentPlayerIndex += 1;
+        }
+    }
+
+    private void decreaseActivePlayersByOne(){
+        this.numOfActivePlayers -=1;
+    }
+
+    private Player determineStartingPlayer(){
+        if (this.numOfActivePlayers <= 0) {
+            throw new IllegalStateException("No active players left.");
+        }
+        Player player = getCurrentPlayer();
+        int safetyCheck = 0;
+        while(!player.isAbleToPlay()){
+            cyclePlayerIndex();
+            System.out.println("----------------------------");
+            player = getCurrentPlayer();
+            safetyCheck++;
+
+            if (safetyCheck >= playersList.size()) {
+                throw new IllegalStateException("No valid starting player found.");
             }
         }
-        if(!playersLost.isEmpty()){
-            System.out.println("The following players have lost: ");
-            for(Player loser : playersLost){
-                System.out.println(loser.getName());
+
+        System.out.println("Starting round with player " + player.getName());
+        System.out.println("----------------------------");
+
+        return player;
+    }
+
+    private void printResults(){
+        List<Player> losers = new ArrayList<>();
+        List<Player> winners = new ArrayList<>();
+        for(Player player : playersList){
+            if(
+                player.getStatus().equals("win")
+            ){
+                winners.add(player);
+            } else {
+                losers.add(player);
             }
+        }
+        System.out.println("The following players have won: ");
+        printList(winners);
+
+        System.out.println("The following players have lost: ");
+        printList(losers);
+    }
+
+    private void printList(List<Player> players){
+        for(Player player : players){
+            System.out.printf("%s with a score of %d", player.getName(),player.getScore());
+            System.out.println("");
         }
     }
 
@@ -177,6 +186,10 @@ public class Game{
 
     public Player getCurrentPlayer(){
         return playersList.get(this.currentPlayerIndex);
+    }
+
+    public void endGame(){
+        this.gameScanner.close();
     }
 
     // Static Methods
